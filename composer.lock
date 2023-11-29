@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4115892b73f2bb7a032a8692562133a",
+    "content-hash": "d4b51b29f2ff8e9cf950e49cf8025aa3",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -155,6 +155,61 @@
                 }
             ],
             "time": "2023-10-18T10:50:13+00:00"
+        },
+        {
+            "name": "borodin-vasiliy/php-stories",
+            "version": "1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/borodin-vasiliy/php-stories.git",
+                "reference": "427b2fa58b815a0b0b2ffd45a3753daf45fba217"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/borodin-vasiliy/php-stories/zipball/427b2fa58b815a0b0b2ffd45a3753daf45fba217",
+                "reference": "427b2fa58b815a0b0b2ffd45a3753daf45fba217",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "BorodinVasiliy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vasily Borodin",
+                    "email": "mail@tltin.ru"
+                }
+            ],
+            "description": "PHP-Library for create stories using images, text and animation. Use GD-Library",
+            "keywords": [
+                "animation",
+                "create animation",
+                "create stories",
+                "create video",
+                "facebook",
+                "generate animation",
+                "generate stories",
+                "generate video",
+                "instagram",
+                "social network",
+                "stories",
+                "video",
+                "vkontakte"
+            ],
+            "support": {
+                "issues": "https://github.com/borodin-vasiliy/php-stories/issues",
+                "source": "https://github.com/borodin-vasiliy/php-stories/tree/master"
+            },
+            "time": "2019-01-13T14:39:37+00:00"
         },
         {
             "name": "brick/math",
@@ -7346,6 +7401,52 @@
                 }
             ],
             "time": "2022-03-08T17:03:00+00:00"
+        },
+        {
+            "name": "wapmorgan/mp3info",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wapmorgan/Mp3Info.git",
+                "reference": "f4e3b0d606732f667729c116e1baa4f845a65f9d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wapmorgan/Mp3Info/zipball/f4e3b0d606732f667729c116e1baa4f845a65f9d",
+                "reference": "f4e3b0d606732f667729c116e1baa4f845a65f9d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.4.0"
+            },
+            "bin": [
+                "bin/mp3scan"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "wapmorgan\\Mp3Info\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "description": "The fastest php library to extract mp3 tags & meta information.",
+            "keywords": [
+                "audio",
+                "id3",
+                "id3v1",
+                "id3v2",
+                "mp3",
+                "mpeg"
+            ],
+            "support": {
+                "issues": "https://github.com/wapmorgan/Mp3Info/issues",
+                "source": "https://github.com/wapmorgan/Mp3Info/tree/0.1.0"
+            },
+            "time": "2023-05-28T18:37:15+00:00"
         },
         {
             "name": "webmozart/assert",
