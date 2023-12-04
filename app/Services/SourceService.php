@@ -31,7 +31,7 @@ class SourceService
             $page = $browser->createPage();
             $page->navigate($source->url)->waitForNavigation();
 
-            $html = $page->getHtml();
+            $dom = $page->dom();
             eval($source->eval_knowledge_url);
 
 
