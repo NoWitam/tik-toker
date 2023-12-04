@@ -29,5 +29,4 @@ Route::get('/test', function () {
 Route::get('/', function () {
 
 
-
 });
