@@ -11,7 +11,7 @@ class SourceService
     {
         $urls = self::getUrls($source);
 
-        var_dump($urls);
+        dd($urls);
     }
 
 
