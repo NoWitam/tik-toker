@@ -59,6 +59,8 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
+    'chromium' => env('CHROMIUM'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

@@ -16,7 +16,8 @@ class KnowledgeResource extends Resource
 {
     protected static ?string $model = Knowledge::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
+    protected static ?string $navigationGroup = 'Knowledge Base';
 
     public static function form(Form $form): Form
     {

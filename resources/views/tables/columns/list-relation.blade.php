@@ -1,7 +1,7 @@
 <div>
     @foreach ($getState() as $relation)
-        <div>
+        <span>
             {{ $relation->name }}
-        </div>
+        </span>
     @endforeach
 </div>
