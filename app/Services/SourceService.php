@@ -20,7 +20,7 @@ class SourceService
             $data['knowledge'][$url] = static::getKnowledge($url, $source);
         }
 
-        dd($data);
+        return $data;
     }
 
 

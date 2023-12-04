@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SourceResource\Pages;
 use App\Filament\Resources\SourceResource\RelationManagers;
+use App\Jobs\ParseSource;
 use App\Models\Source;
 use App\Services\SourceService;
 use Filament\Forms;
@@ -41,7 +42,7 @@ class SourceResource extends Resource
                         Forms\Components\Actions::make([
                             Forms\Components\Actions\Action::make('test')->icon('heroicon-o-play-pause')->requiresConfirmation()
                                 ->action( function (Source $source) {
-                                    SourceService::test($source);
+                                    ParseSource::dispatch($source, 'test');
                                 })
                         ])->fullWidth(),
                         Forms\Components\Toggle::make('isActive')->label('Wyłącz/Włącz'),
