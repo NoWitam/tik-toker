@@ -37,4 +37,14 @@ class ParseSource implements ShouldQueue
 
         Log::info("Parsowanie gotowe - " . $this->source->name, $data);
     }
+
+    public function failed(\Throwable $exception): void
+    {
+        Log::info("Parsowanie error - " . $this->source->name, [
+            'message' => $exception->getMessage().
+            'file' -> $exception->getFile(),
+            'line' -> $exception->getLine(),
+            'code' => $exception->getCode(),
+        ]);
+    }
 }
