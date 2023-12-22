@@ -3,7 +3,7 @@
         get prettyJson() {
             json = '{{$getState()}}'
             json = json.replace(/&quot;/g, '\\"')
-            json = JSON.parse('{{$getState()}}')
+            json = JSON.parse(json)
             return window.prettyPrint(json)
         }
     }">
