@@ -2,7 +2,7 @@
     <div x-data="{
         get prettyJson() {
             json = '{{$getState()}}';
-            json = json.replace(/&quot;/g, '\\"');
+            json = json.replace(/&quot;/g, '\\"').replace(/\\n/g, '').replace(/\n/g, '');
             json = JSON.parse(json);
             return window.prettyPrint(json);
         }
