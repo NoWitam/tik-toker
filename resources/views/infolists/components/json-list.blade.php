@@ -9,6 +9,6 @@
             return window.prettyPrint({!! $getState() !!})
         }
     }'>
-        <pre class="prettyjson" x-html="prettyJson"></span>
+        <pre style="max-height: 600px;" class="prettyjson" x-html="prettyJson"></span>
     </div>
 </x-dynamic-component>
