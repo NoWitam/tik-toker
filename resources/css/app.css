@@ -1,0 +1,20 @@
+.tag {
+    --tw-bg-opacity: 1;
+    --tw-text-opacity: 1;
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    --tw-ring-inset: inset;
+    --tw-ring-color: rgba(var(--primary-600),0.1);
+    align-items: center;
+    background-color: rgba(var(--primary-50),var(--tw-bg-opacity));
+    border-radius: .375rem;
+    box-shadow: var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000);
+    color: rgba(var(--primary-600),var(--tw-text-opacity));
+    display: inline-flex;
+    font-size: .75rem;
+    font-weight: 500;
+    gap: .25rem;
+    line-height: 1rem;
+    padding: .25rem .5rem;
+    word-break: break-all;
+}

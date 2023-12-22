@@ -2,15 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasTags;
+use App\Models\Interfaces\Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Knowledge extends Model
+class Knowledge extends Model implements Taggable
 {
-    use HasFactory;
-
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
-    }
+    use HasFactory, HasTags;
 }

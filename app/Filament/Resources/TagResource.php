@@ -19,7 +19,9 @@ class TagResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationGroup = 'Knowledge Base';
+    protected static ?string $navigationGroup = 'Baza wiedzy';
+    protected static ?string $modelLabel = 'Tag';
+    protected static ?string $pluralModelLabel = 'Tag';
 
     public static function form(Form $form): Form
     {
