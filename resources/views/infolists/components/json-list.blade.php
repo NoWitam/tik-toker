@@ -1,5 +1,5 @@
 <x-dynamic-component :component="$getEntryWrapperView()" :entry="$entry">
-    <div x-data='{
+    <div style="width: 850px" x-data='{
         get prettyJson() {
             return window.prettyPrint({!! $getState() !!})
         }
