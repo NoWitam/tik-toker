@@ -17,7 +17,9 @@ class KnowledgeResource extends Resource
     protected static ?string $model = Knowledge::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
-    protected static ?string $navigationGroup = 'Knowledge Base';
+    protected static ?string $navigationGroup = 'Baza wiedzy';
+    protected static ?string $modelLabel = 'Wiedza';
+    protected static ?string $pluralModelLabel = 'Wiedza';
 
     public static function form(Form $form): Form
     {
@@ -30,7 +32,7 @@ class KnowledgeResource extends Resource
                     ->relationship(name: 'tags', titleAttribute: 'name')
                     ->preload()
                     ->searchable(),
-                Forms\Components\Textarea::make('content')->rows(20)->required()->label('Treść'),
+                Forms\Components\Textarea::make('content')->rows(20)->required()->label('Treść')->columnSpanFull(),
             ]);
     }
 
@@ -39,7 +41,7 @@ class KnowledgeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label('Nazwa'),
-                ListRelation::make('tags')->label('Tagi')
+                Tables\Columns\TagsColumn::make('tags.name')->label('Tagi')
             ])
             ->filters([
                 //

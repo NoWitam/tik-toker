@@ -18,7 +18,9 @@ class ContentResource extends Resource
     protected static ?string $model = Content::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-film';
-    protected static ?string $navigationGroup = 'Creator';
+    protected static ?string $navigationGroup = 'Twórca';
+    protected static ?string $modelLabel = 'Kontent';
+    protected static ?string $pluralModelLabel = 'Kontent';
 
     public static function form(Form $form): Form
     {
