@@ -1,6 +1,8 @@
 <x-dynamic-component :component="$getEntryWrapperView()" :entry="$entry">
     <div x-data="{
         get prettyJson() {
+            json = '{{$getState()}}'
+            json = json.replace(/&quot;/g, '\\"')
             json = JSON.parse('{{$getState()}}')
             return window.prettyPrint(json)
         }
