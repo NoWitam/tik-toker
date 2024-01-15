@@ -30,7 +30,7 @@ class SourceService
 
         $browser = $browserFactory->createBrowser([
           'headless' => true, // disable headless mode
-          'sendSyncDefaultTimeout' => 20000,
+          'sendSyncDefaultTimeout' => 30000,
           'connectionDelay' => 500
         ]);
 
@@ -63,7 +63,7 @@ class SourceService
 
         $browser = $browserFactory->createBrowser([
           'headless' => true, // disable headless mode
-          'sendSyncDefaultTimeout' => 20000,
+          'sendSyncDefaultTimeout' => 30000,
           'connectionDelay' => 500
         ]);
 
