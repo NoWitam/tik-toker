@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\AccountResource\RelationManagers;
 
+use App\Models\Enums\DayOfWeek;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -13,6 +14,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class SeriesRelationManager extends RelationManager
 {
     protected static string $relationship = 'series';
+    
+    protected static ?string $title = 'Serie';
+
 
     public function form(Form $form): Form
     {
@@ -27,13 +31,16 @@ class SeriesRelationManager extends RelationManager
                     ->relationship(name: 'tags', titleAttribute: 'name')
                     ->preload()
                     ->searchable(),
+                Forms\Components\Repeater::make('publications')->relationship()->schema([
+                    Forms\Components\Select::make('day')->options(DayOfWeek::class)->label('Dzień tygodnia')->required(),
+                    Forms\Components\TimePicker::make('time')->label('Godzina')->required()
+                ])->columns(2)->columnSpanFull()->label('Publikacje'),
                 Forms\Components\Textarea::make('instruction')
                     ->required()
                     ->label('Instrukcja')
                     ->maxLength(10200)
                     ->rows(20)
                     ->columnSpanFull(),
-                Forms\Components\Repeater::make('publications')
             ]);
     }
 
@@ -42,7 +49,8 @@ class SeriesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('name')->label('Nazwa'),
+                Tables\Columns\TagsColumn::make('tags.name')->label('Tagi')
             ])
             ->filters([
                 //

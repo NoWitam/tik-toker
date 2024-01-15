@@ -1,34 +1,39 @@
 <?php
 
-namespace App\Filament\RelationManagers;
+namespace App\Filament\Resources;
 
-use App\Infolists\Components\JsonList;
-use App\Jobs\ParseSource;
+use App\Filament\Resources\ActionResource\Pages;
+use App\Models\Action;
 use App\Models\Enums\ActionStatus;
-use Filament\Infolists;
-use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use App\Jobs\ParseSourceTest;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Bus;
-use Filament\Infolists\Infolist;
-use Novadaemon\FilamentPrettyJson\PrettyJson;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Stringable;
 
-class ActionsRelationManager extends RelationManager
+class ActionResource extends Resource
 {
-    protected static string $relationship = 'actions';
-    protected static ?string $title = 'Akcje';
+    protected static ?string $model = Action::class;
 
-    public function table(Table $table): Table
+    protected static ?string $navigationIcon = 'heroicon-m-cog';
+    protected static ?string $navigationGroup = 'Zarządzanie';
+    protected static ?string $modelLabel = 'Akcje';
+    protected static ?string $pluralModelLabel = 'Akcje';
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                //
+            ]);
+    }
+
+    public static function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('type')
             ->columns([
-                Tables\Columns\TextColumn::make('info')->label('Informacje')->wrap(),
+                Tables\Columns\TextColumn::make('info')->label('Informacje'),
                 Tables\Columns\IconColumn::make('status')->icon(fn ($state): string => $state->getIcon())->color(fn ($state): string => $state->getColor()),
                 Tables\Columns\TextColumn::make('type')->label('Typ'),
                 Tables\Columns\TextColumn::make('attempts')->label('Próby'),
@@ -37,20 +42,6 @@ class ActionsRelationManager extends RelationManager
             ->defaultSort('updated_at', 'desc')
             ->filters([
                 //
-            ])
-            ->headerActions([
-                Tables\Actions\Action::make('test')
-                    ->label('Testuj')->icon('heroicon-o-play-pause')
-                    ->requiresConfirmation()
-                    ->action( function () {
-                        ParseSourceTest::dispatch($this->getOwnerRecord())->onQueue('user');
-                    }),
-                Tables\Actions\Action::make('getKnowledge')
-                    ->label('Wydobyj wiedze')->icon('heroicon-o-document-magnifying-glass')
-                    ->requiresConfirmation()
-                    ->action( function () {
-                        ParseSource::dispatch($this->getOwnerRecord())->onQueue('user');
-                    }),
             ])
             ->actions([
                 Tables\Actions\DeleteAction::make()
@@ -77,6 +68,27 @@ class ActionsRelationManager extends RelationManager
                 Tables\Actions\ViewAction::make()->hidden(function ($record) {
                     return $record->status != ActionStatus::FAILED AND $record->status != ActionStatus::SUCCESS;
                 }),
+                Tables\Actions\Action::make('showParent')
+                    ->label('Sprawdź')
+                    ->icon('heroicon-o-eye')
+                    ->action(function ($record) {
+
+                        $className = str($record->actionable_type)
+                            ->whenContains(
+                                '\\Resources\\',
+                                fn (Stringable $slug): Stringable => $slug->afterLast('\\Resources\\'),
+                                fn (Stringable $slug): Stringable => $slug->classBasename(),
+                            )
+                            ->beforeLast('Resource')
+                            ->plural()
+                            ->explode('\\')
+                            ->map(fn (string $string) => str($string)->kebab()->slug())
+                            ->implode('/');
+
+                        return redirect()->route("filament.admin.resources.{$className}.edit", [
+                            'record' => $record->actionable
+                        ]);
+                    })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -85,14 +97,17 @@ class ActionsRelationManager extends RelationManager
             ]);
     }
 
-
-
-    public function infolist(Infolist $infolist): Infolist
+    public static function getRelations(): array
     {
-        return $infolist
-            ->schema([
-                Infolists\Components\TextEntry::make('info')->label('Informacja'),
-                JsonList::make('data')
-            ])->columns(1);
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListActions::route('/'),
+        ];
     }
 }
