@@ -50,7 +50,7 @@ class ActionsRelationManager extends RelationManager
                     ->requiresConfirmation()
                     ->action( function () {
                         ParseSource::dispatch($this->getOwnerRecord())->onQueue('user');
-                    }),
+                    })
             ])
             ->actions([
                 Tables\Actions\DeleteAction::make()
@@ -58,7 +58,7 @@ class ActionsRelationManager extends RelationManager
                         return $record->status != ActionStatus::WAITING;
                     }),
                 Tables\Actions\Action::make('retry')
-                    ->label('Ponów')
+                    ->label('Retry')
                     ->icon('heroicon-o-arrow-path')
                     ->color('success')
                     ->requiresConfirmation()
