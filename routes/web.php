@@ -25,7 +25,7 @@ Route::get('/test', function () {
     dd(Action::all());
 });
 
-Route::get('chromium', function() {
+Route::get('/chromium', function() {
     dd(config('app.chromium'));
 });
 
