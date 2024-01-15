@@ -42,7 +42,7 @@ class SourceResource extends Resource
                         CodeEditor::make('eval_knowledge_url')->required()->label('Url wiedzy')->hint('Urle zapisać do zmiennej $urls'),
                         CodeEditor::make('eval_knowledge_name')->required()->label('Nazwa wiedzy')->hint('Nazwe zapisać do zmiennej $name'),
                         CodeEditor::make('eval_knowledge_content')->required()->label('Treść wiedzy')->hint('Treść zapisać do zmiennej $content'),
-                    ])->columns(2),
+                    ])->columns(1),
                 ])
             ])->columns(1);
     }

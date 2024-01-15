@@ -67,11 +67,11 @@ class AppServiceProvider extends ServiceProvider
                 Action::where('job_uuid', $event->job->uuid())->firstOrFail()->update([
                     'status' => ActionStatus::FAILED,
                     'info' => $event->exception->getMessage(),
-                    'data' => str_replace(["\\", "'"], ["/", "\'"], json_encode([
+                    'data' => json_encode([
                         'message' => $event->exception->getMessage(),
                         'line' => $event->exception->getLine(),
                         'file' => $event->exception->getFile(),
-                    ]))
+                    ])
                 ]);
 
             }

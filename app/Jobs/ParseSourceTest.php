@@ -9,6 +9,7 @@ use App\Services\SourceService;
 
 class ParseSourceTest extends ActionableJob
 {
+    public $timeout = 1200;
 
     /**
      * Create a new job instance.
@@ -33,6 +34,10 @@ class ParseSourceTest extends ActionableJob
     {
         $data = SourceService::test($this->source);
 
-        return $data;
+        return [
+            "info" => "Zanaleziono " . count($data['knowledge']) . " danych",
+            "next_page" => $data['next'],
+            "urls" => array_keys($data['knowledge'])
+        ];
     }
 }
