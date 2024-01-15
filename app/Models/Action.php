@@ -14,9 +14,4 @@ class Action extends Model
         'status' => ActionStatus::class,
     ];
 
-    public function actionable()
-    {
-        return $this->morphTo('actionable');
-    }
-
 }

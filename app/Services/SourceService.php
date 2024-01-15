@@ -101,6 +101,7 @@ class SourceService
 
         $browser = $browserFactory->createBrowser([
           'headless' => true, // disable headless mode
+          'debugLogger' => 'php://stdout',
           'sendSyncDefaultTimeout' => 30000,
           'connectionDelay' => 500
         ]);
@@ -132,6 +133,7 @@ class SourceService
 
         $browser = $browserFactory->createBrowser([
           'headless' => true, // disable headless mode
+          'debugLogger' => 'php://stdout',
           'sendSyncDefaultTimeout' => 30000,
           'connectionDelay' => 500
         ]);
