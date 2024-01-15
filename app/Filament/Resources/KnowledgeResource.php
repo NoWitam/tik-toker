@@ -32,8 +32,9 @@ class KnowledgeResource extends Resource
                     ->relationship(name: 'tags', titleAttribute: 'name')
                     ->preload()
                     ->searchable(),
+                    Forms\Components\TextInput::make('unique')->required()->maxLength(255)->label('Identyfikator'),
                 Forms\Components\Textarea::make('content')->rows(20)->required()->label('Treść')->columnSpanFull(),
-            ]);
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -48,6 +49,7 @@ class KnowledgeResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

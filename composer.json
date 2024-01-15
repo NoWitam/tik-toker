@@ -17,6 +17,8 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "novadaemon/filament-pretty-json": "^2.0",
+        "predis/predis": "^2.2",
+        "voku/simple_html_dom": "^4.8",
         "wapmorgan/mp3info": "^0.1.0",
         "wiebenieuwenhuis/filament-code-editor": "^1.0"
     },
