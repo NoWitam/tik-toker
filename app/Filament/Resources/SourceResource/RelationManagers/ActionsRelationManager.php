@@ -3,6 +3,7 @@
 namespace App\Filament\RelationManagers;
 
 use App\Infolists\Components\JsonList;
+use App\Jobs\ParseSource;
 use App\Models\Enums\ActionStatus;
 use Filament\Infolists;
 use Filament\Forms;
@@ -27,7 +28,7 @@ class ActionsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('type')
             ->columns([
-                Tables\Columns\TextColumn::make('info')->label('Informacje'),
+                Tables\Columns\TextColumn::make('info')->label('Informacje')->wrap(),
                 Tables\Columns\IconColumn::make('status')->icon(fn ($state): string => $state->getIcon())->color(fn ($state): string => $state->getColor()),
                 Tables\Columns\TextColumn::make('type')->label('Typ'),
                 Tables\Columns\TextColumn::make('attempts')->label('Próby'),
@@ -42,7 +43,13 @@ class ActionsRelationManager extends RelationManager
                     ->label('Testuj')->icon('heroicon-o-play-pause')
                     ->requiresConfirmation()
                     ->action( function () {
-                        ParseSourceTest::dispatch($this->getOwnerRecord());
+                        ParseSourceTest::dispatch($this->getOwnerRecord())->onQueue('user');
+                    }),
+                Tables\Actions\Action::make('getKnowledge')
+                    ->label('Wydobyj wiedze')->icon('heroicon-o-document-magnifying-glass')
+                    ->requiresConfirmation()
+                    ->action( function () {
+                        ParseSource::dispatch($this->getOwnerRecord())->onQueue('user');
                     })
             ])
             ->actions([
@@ -60,12 +67,16 @@ class ActionsRelationManager extends RelationManager
                         $record->refresh();
                         if($record->status == ActionStatus::FAILED) {
                             Artisan::call('queue:retry', ['id' => [$record->job_uuid]]);
+                            $record->status = ActionStatus::WAITING;
+                            $record->save();    
                         }
 
                     })->hidden(function ($record) {
                         return $record->status != ActionStatus::FAILED;
                     }),
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()->hidden(function ($record) {
+                    return $record->status != ActionStatus::FAILED AND $record->status != ActionStatus::SUCCESS;
+                }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
