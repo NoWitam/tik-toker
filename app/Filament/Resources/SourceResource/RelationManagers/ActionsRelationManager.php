@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\SourceResource\RelationManagers;
 
+use App\Filament\RelationManagers\ResourceRelationManager;
+use App\Filament\Resources\ActionResource;
 use App\Infolists\Components\JsonList;
 use App\Jobs\ParseSource;
 use App\Models\Enums\ActionStatus;
@@ -18,27 +20,19 @@ use Illuminate\Support\Facades\Bus;
 use Filament\Infolists\Infolist;
 use Novadaemon\FilamentPrettyJson\PrettyJson;
 
-class ActionsRelationManager extends RelationManager
+class ActionsRelationManager extends ResourceRelationManager
 {
     protected static string $relationship = 'actions';
     protected static ?string $title = 'Akcje';
 
-    public function table(Table $table): Table
+    public function getResource() : string
+    {
+        return ActionResource::class;
+    }
+
+    public function extendTable(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('type')
-            ->columns([
-                Tables\Columns\TextColumn::make('info')->label('Informacje')->wrap(),
-                Tables\Columns\IconColumn::make('status')->icon(fn ($state): string => $state->getIcon())->color(fn ($state): string => $state->getColor()),
-                Tables\Columns\TextColumn::make('type')->label('Typ'),
-                Tables\Columns\TextColumn::make('attempts')->label('Próby'),
-                Tables\Columns\TextColumn::make('cost')->label('Koszt')->suffix('$'),
-                Tables\Columns\TextColumn::make('created_at')->label('Utworzono'),
-            ])
-            ->defaultSort('updated_at', 'desc')
-            ->filters([
-                //
-            ])
             ->headerActions([
                 Tables\Actions\Action::make('test')
                     ->label('Testuj')->icon('heroicon-o-play-pause')
@@ -53,39 +47,10 @@ class ActionsRelationManager extends RelationManager
                         ParseSource::dispatch($this->getOwnerRecord())->onQueue('user');
                     }),
             ])
-            ->actions([
-                Tables\Actions\DeleteAction::make()
-                    ->hidden(function ($record) {
-                        return $record->status != ActionStatus::WAITING;
-                    }),
-                Tables\Actions\Action::make('retry')
-                    ->label('Ponów')
-                    ->icon('heroicon-o-arrow-path')
-                    ->color('success')
-                    ->requiresConfirmation()
-                    ->action(function ($record) {
-
-                        $record->refresh();
-                        if($record->status == ActionStatus::FAILED) {
-                            Artisan::call('queue:retry', ['id' => [$record->job_uuid]]);
-                            $record->status = ActionStatus::WAITING;
-                            $record->save();    
-                        }
-
-                    })->hidden(function ($record) {
-                        return $record->status != ActionStatus::FAILED;
-                    }),
-                Tables\Actions\ViewAction::make()->hidden(function ($record) {
-                    return $record->status != ActionStatus::FAILED AND $record->status != ActionStatus::SUCCESS;
-                }),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+            ->pushActions([
+                Tables\Actions\ViewAction::make('view')
             ]);
     }
-
 
 
     public function infolist(Infolist $infolist): Infolist

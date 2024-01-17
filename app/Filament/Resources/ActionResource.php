@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Stringable;
 use Filament\Infolists;
 use App\Infolists\Components\JsonList;
+use Filament\Infolists\Infolist;
 
 class ActionResource extends Resource
 {
@@ -99,7 +100,8 @@ class ActionResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->poll('10s');
     }
 
     public static function getRelations(): array
