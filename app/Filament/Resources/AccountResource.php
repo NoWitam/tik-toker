@@ -36,11 +36,14 @@ class AccountResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label('Nazwa'),
+                Tables\Columns\TextColumn::make('publications_count')->label('Filmy per tydzień')->counts('publications'),
+                Tables\Columns\TextColumn::make('contents_count')->label('Filmy')->counts('contents'),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\DeleteAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

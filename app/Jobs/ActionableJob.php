@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Exceptions\ReleaseActionableJobException;
 use App\Models\Action;
 use App\Models\Enums\ActionStatus;
 use App\Models\Interfaces\Actionable;
@@ -33,7 +34,24 @@ abstract class ActionableJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $data = $this->run();
+        $this->action = Action::where('job_uuid', $this->job->uuid())->firstOrFail();
+        
+        try{
+            $data = $this->run();
+        } catch(ReleaseActionableJobException $e) {
+
+            $this->action->update([
+                'status' => ActionStatus::WAITING,
+                'info' => $e->getMessage(),
+            ]);
+
+            // Action::where('job_uuid', $this->job->uuid())->firstOrFail()->update([
+            //     'status' => ActionStatus::WAITING,
+            //     'info' => $e->getMessage(),
+            // ]);
+
+            $this->release($e->getTime());
+        }
 
         $info = null;
 
@@ -42,7 +60,7 @@ abstract class ActionableJob implements ShouldQueue
             unset($data['info']);
         }
 
-        Action::where('job_uuid', $this->job->uuid())->firstOrFail()->update([
+        $this->action->update([
             'status' => ActionStatus::SUCCESS,
             'data' => json_encode($data),
             'info' => $info
