@@ -27,7 +27,7 @@ class ParseSource extends ActionableJob
 
     public function getType() : string
     {
-        return 'get knowledge';
+        return 'Wydobyj wiedze';
     }
 
     public function run(): array

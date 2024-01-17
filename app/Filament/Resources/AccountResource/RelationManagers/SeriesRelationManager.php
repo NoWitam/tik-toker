@@ -3,12 +3,15 @@
 namespace App\Filament\Resources\AccountResource\RelationManagers;
 
 use App\Models\Enums\DayOfWeek;
+use App\Services\SeriesService;
+use App\Tables\Columns\CompletionColumn;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SeriesRelationManager extends RelationManager
@@ -50,7 +53,14 @@ class SeriesRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label('Nazwa'),
-                Tables\Columns\TagsColumn::make('tags.name')->label('Tagi')
+                Tables\Columns\TagsColumn::make('tags.name')->label('Tagi'),
+                Tables\Columns\TextColumn::make('contents_count')->label('Filmy')->counts('contents'),
+                Tables\Columns\TextColumn::make('progrss')->label('Progres')->getStateUsing(function(Model $record) {
+                    $percent = $record->contents_count / SeriesService::getAvailableKnowledgeBuilder($record)->count() * 100;
+                    return round($percent, 2) . "%";
+                }),
+                Tables\Columns\TextColumn::make('actions_sum_cost')->label('Koszt')->sum('actions', 'cost')->suffix('$')->default(0),
+                Tables\Columns\TextColumn::make('publications_count')->label('Filmy per tydzień')->counts('publications'),
             ])
             ->filters([
                 //

@@ -74,12 +74,18 @@ class SourceService
             $knowledge = self::getKnowledge($source, $newKnowledgeUrl);
             Log::info("End go to url - " . $newKnowledgeUrl);
 
-            $model = Knowledge::create([     
-                'name' => $knowledge['name'],
-                'content' => $knowledge['content'],
-                'unique' => $newKnowledgeUrl
-            ]);
-            $model->tags()->sync($source->tags);
+            if(strlen($knowledge['name']) >= 4 AND strlen($knowledge['content']) >= 700) {
+                $model = Knowledge::create([     
+                    'name' => $knowledge['name'],
+                    'content' => $knowledge['content'],
+                    'unique' => $newKnowledgeUrl
+                ]);
+                $model->tags()->sync($source->tags);    
+            } else {
+                $allNewKnowledgeUrls = array_diff($allNewKnowledgeUrls, [$newKnowledgeUrl]);
+                Cache::put('source_parse_all.' . $source->id, $allNewKnowledgeUrls, 2 * 60 * 60);
+            }
+
 
             $newKnowledgeUrls = array_diff($newKnowledgeUrls, [$newKnowledgeUrl]);
             Cache::put('source_parse.' . $source->id, $newKnowledgeUrls, 2 * 60 * 60);

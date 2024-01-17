@@ -3,7 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ContentResource\Pages;
+use App\Filament\Resources\ContentResource\RelationManagers\ActionsRelationManager;
+use App\Models\Account;
 use App\Models\Content;
+use App\Models\Series;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,27 +26,52 @@ class ContentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')->required()->maxLength(255)->label('Nazwa'),
-                Forms\Components\Select::make('knowledge_id')->label('Tagi')
+                Forms\Components\TextInput::make('name')->required()->maxLength(255)->label('Nazwa')->columnSpanFull(),
+
+                Forms\Components\Select::make('series.account_id')->label('Konto')
+                    ->required()
+                    ->options(Account::all()->pluck('name', 'id'))
+                    ->preload()
+                    ->searchable()
+                    ->reactive()
+                    ->afterStateUpdated( fn (callable $set) => $set('series_id', null)),
+                Forms\Components\Select::make('series_id')->label('Seria')
+                    ->required()
+                    ->options( function (callable $get) {
+                        if($get('series.account_id') != null) { 
+                            return Series::where('account_id', $get('series.account_id'))->pluck('name', 'id');
+                        } else {
+                          return [];
+                        }
+                    })->reactive()->searchable(),
+
+
+                Forms\Components\Select::make('knowledge_id')->label('Na podstawie')
                     ->required()
                     ->relationship(name: 'knowledge', titleAttribute: 'name')
                     ->preload()
                     ->searchable(),
-            ]);
+                Forms\Components\DateTimePicker::make('publication_time')->label('Data publikacji')->required()
+            ])->columns(2);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label('Nazwa'),
-                Tables\Columns\TextColumn::make('knowledge.name')->label('Na podstawie'),
+                Tables\Columns\TextColumn::make('name')->label('Nazwa')->wrap(),
+                Tables\Columns\IconColumn::make('status')->icon(fn ($state): string => $state->getIcon())->color(fn ($state): string => $state->getColor()),
+                Tables\Columns\TextColumn::make('series.account.name')->label('Konto'),
+                Tables\Columns\TextColumn::make('series.name')->label('Seria'),
+                Tables\Columns\TextColumn::make('knowledge.name')->label('Na podstawie')->wrap(),
+                Tables\Columns\TextColumn::make('actions_sum_cost')->label('Koszt')->sum('actions', 'cost')->suffix('$')->default(0),
+                Tables\Columns\TextColumn::make('publication_time')->label('Czas publikacji'),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\DeleteAction::make(),
+                //Tables\Actions\DeleteAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -56,7 +84,7 @@ class ContentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ActionsRelationManager::class,
         ];
     }
 

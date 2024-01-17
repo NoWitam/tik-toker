@@ -27,7 +27,7 @@ class ParseSourceTest extends ActionableJob
 
     public function getType() : string
     {
-        return 'test';
+        return 'Test';
     }
 
     public function run(): array

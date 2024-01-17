@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\SourceResource\RelationManagers;
+namespace App\Filament\Resources\ContentResource\RelationManagers;
 
 use App\Infolists\Components\JsonList;
 use App\Jobs\ParseSource;
@@ -40,18 +40,6 @@ class ActionsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\Action::make('test')
-                    ->label('Testuj')->icon('heroicon-o-play-pause')
-                    ->requiresConfirmation()
-                    ->action( function () {
-                        ParseSourceTest::dispatch($this->getOwnerRecord())->onQueue('user');
-                    }),
-                Tables\Actions\Action::make('getKnowledge')
-                    ->label('Wydobyj wiedze')->icon('heroicon-o-document-magnifying-glass')
-                    ->requiresConfirmation()
-                    ->action( function () {
-                        ParseSource::dispatch($this->getOwnerRecord())->onQueue('user');
-                    }),
             ])
             ->actions([
                 Tables\Actions\DeleteAction::make()

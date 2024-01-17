@@ -12,6 +12,8 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Stringable;
+use Filament\Infolists;
+use App\Infolists\Components\JsonList;
 
 class ActionResource extends Resource
 {
@@ -29,14 +31,20 @@ class ActionResource extends Resource
             ]);
     }
 
+    public static function canCreate(): bool
+    {
+       return false;
+    }
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('info')->label('Informacje'),
+                Tables\Columns\TextColumn::make('info')->label('Informacje')->wrap(),
                 Tables\Columns\IconColumn::make('status')->icon(fn ($state): string => $state->getIcon())->color(fn ($state): string => $state->getColor()),
                 Tables\Columns\TextColumn::make('type')->label('Typ'),
                 Tables\Columns\TextColumn::make('attempts')->label('Próby'),
+                Tables\Columns\TextColumn::make('cost')->label('Koszt')->suffix('$'),
                 Tables\Columns\TextColumn::make('created_at')->label('Utworzono'),
             ])
             ->defaultSort('updated_at', 'desc')
@@ -65,9 +73,6 @@ class ActionResource extends Resource
                     })->hidden(function ($record) {
                         return $record->status != ActionStatus::FAILED;
                     }),
-                Tables\Actions\ViewAction::make()->hidden(function ($record) {
-                    return $record->status != ActionStatus::FAILED AND $record->status != ActionStatus::SUCCESS;
-                }),
                 Tables\Actions\Action::make('showParent')
                     ->label('Sprawdź')
                     ->icon('heroicon-o-eye')
