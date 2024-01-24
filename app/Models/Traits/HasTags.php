@@ -11,4 +11,11 @@ trait HasTags
     {
         return $this->morphToMany(Tag::class, 'taggable');
     }
+
+    protected static function bootHasTags()
+    {
+        static::deleting(function ($model) {
+            $model->tags()->sync([]);
+        });
+    }
 }

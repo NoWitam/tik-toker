@@ -7,15 +7,15 @@ use Throwable;
 
 class ReleaseActionableJobException extends \Exception
 {
-    private int $time;
-    public function __construct(int $time, $code = 0, Throwable $previous = null)
+    private Carbon $time;
+    public function __construct(Carbon $time, $code = 0, Throwable $previous = null)
     {
         $this->time = $time;
-        $readyAt = Carbon::createFromTimestamp($time)->format('H:i:s');
-        parent::__construct("API dostępne o {$readyAt}", $code, $previous);
+        $readyAt = $time->format('H:i:s');
+        parent::__construct("Zadanie dostępne o {$readyAt}", $code, $previous);
     }
 
-    public function getTime(): int
+    public function getTime(): Carbon
     {
         return $this->time;
     }

@@ -9,11 +9,10 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 class SeriesService
 {
 
-    static function getAvailableKnowledgeBuilder(Series $series) : Builder
+    static function getAvailableKnowledgeBuilder(Series $serie) : Builder
     {
-        return Knowledge::whereHas('tags', function (Builder $q) use ($series) {
-            $q->whereIn('taggables.tag_id', $series->tags->pluck('id'));
+        return Knowledge::whereHas('tags', function (Builder $q) use ($serie) {
+            $q->whereIn('taggables.tag_id', $serie->tags->pluck('id'));
         });
     }
-
 }
