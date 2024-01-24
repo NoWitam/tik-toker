@@ -4,12 +4,19 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ContentResource\Pages;
 use App\Filament\Resources\ContentResource\RelationManagers\ActionsRelationManager;
+use App\Infolists\Components\JsonList;
 use App\Models\Account;
 use App\Models\Content;
 use App\Models\Series;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\Tabs\Tab;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\TextEntry\TextEntrySize;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -71,14 +78,39 @@ class ContentResource extends Resource
                 //
             ])
             ->actions([
-                //Tables\Actions\DeleteAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('manage')->label('Zarządzaj')->url(fn ($record) => self::getUrl('edit', ['record' => $record]))
+                                ->color('gray')->icon('heroicon-o-command-line')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Tabs::make('tabs')->tabs([
+                    Tab::make("Informacje")->schema([
+                        TextEntry::make('name')->label('Nazwa')->size(TextEntrySize::Large)->weight(FontWeight::SemiBold),
+                        TextEntry::make('publication_time')->label('Data publikacji')->size(TextEntrySize::Large)->weight(FontWeight::SemiBold),
+                        TextEntry::make('series.account.name')->label('Konto')->size(TextEntrySize::Large)->weight(FontWeight::SemiBold),
+                        TextEntry::make('series.name')->label('Seria')->size(TextEntrySize::Large)->weight(FontWeight::SemiBold),
+                    ])->columns(2),
+                    Tab::make('Na podstawie')->schema([
+                        TextEntry::make('knowledge.name')->label('Nazwa')->size(TextEntrySize::Large)->weight(FontWeight::SemiBold) ,
+                        TextEntry::make('knowledge.tags.name')->label('Tagi')->badge()->separator(','),
+                        TextEntry::make('knowledge.content')->label('Treść'),   
+                    ]),
+                    Tab::make('Scenariusz')->schema([
+                        JsonList::make('archivalScript')->label("Skrypt")        
+                    ])->columns(1)->hidden(function ($record) {
+                        return $record->archivalScript == null;
+                    })
+                ])
+            ])->columns(1);
     }
 
     public static function getRelations(): array

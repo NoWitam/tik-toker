@@ -10,6 +10,7 @@ use App\Services\SourceService;
 class ParseSource extends ActionableJob
 {
     public $timeout = 1200;
+    public $failOnTimeout = false;
 
     /**
      * Create a new job instance.

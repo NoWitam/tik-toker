@@ -2,7 +2,16 @@
 
 namespace App\Models\Enums;
 
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use App\Jobs\CreateScript;
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Builder;
+use Filament\Forms\Components\Builder\Block;
+use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Get;
+use Illuminate\Database\Eloquent\Model;
 
 enum ContentStatus : int
 {
@@ -31,6 +40,17 @@ enum ContentStatus : int
             self::CREATED => "success",
             self::PUBLISHED => "success",
             self::ERROR => "danger",
+        };
+    }
+
+    public function getDescription(): string
+    {
+        return match($this) {
+            self::IN_PROCESS => "Kontent w trakcie tworzenia. Poczekaj aż proces ten się skończy",
+            self::WAITING => "Kontent czeka na interakcje użytkownika. Wypełnij formularz",
+            self::CREATED => "Kontent stowrzony. Możesz go jeszcze edytować przed publikacją",
+            self::PUBLISHED => "Kontent opublikowany !",
+            self::ERROR => "Błąd tworzenia kontentu :(",
         };
     }
 }

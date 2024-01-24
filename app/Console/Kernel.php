@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Jobs\ParseSource;
 use App\Models\Source;
+use App\Services\ContentService;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -19,7 +20,19 @@ class Kernel extends ConsoleKernel
             {
                 ParseSource::dispatch($source)->onQueue('scheduler');
             }
-        })->weeklyOn(6, '6:00');
+        })->weeklyOn(7, '6:00');
+
+        $schedule->call(function () {
+            ContentService::createContentForNextWeek();
+        })->weeklyOn(6, '4:00');
+
+        $schedule->call(function () {
+            ContentService::generateVideoForWaitingContent();
+        })->dailyAt("22:30");
+
+        $schedule->call(function () {
+            ContentService::clearErrorContent();
+        })->dailyAt("22");
     }
 
     /**

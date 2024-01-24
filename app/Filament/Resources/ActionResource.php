@@ -9,11 +9,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Stringable;
-use Filament\Infolists;
-use App\Infolists\Components\JsonList;
+use App\Services\ActionService;
 
 class ActionResource extends Resource
 {
@@ -62,14 +59,7 @@ class ActionResource extends Resource
                     ->color('success')
                     ->requiresConfirmation()
                     ->action(function ($record) {
-
-                        $record->refresh();
-                        if($record->status == ActionStatus::FAILED) {
-                            Artisan::call('queue:retry', ['id' => [$record->job_uuid]]);
-                            $record->status = ActionStatus::WAITING;
-                            $record->save();    
-                        }
-
+                        ActionService::retry($record);
                     })->hidden(function ($record) {
                         return $record->status != ActionStatus::FAILED;
                     }),
