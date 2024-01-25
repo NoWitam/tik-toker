@@ -16,7 +16,7 @@ class Action extends Model
 
     public function actionable()
     {
-        return $this->morphTo('actionable');
+        return $this->morphTo('actionable')->withTrashed();
     }
 
 }

@@ -9,11 +9,12 @@ use App\Models\Interfaces\Statusable;
 use App\Models\Traits\HasActions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 class Content extends Model implements Actionable, Statusable
 {
-    use HasFactory, HasActions;
+    use HasFactory, HasActions, SoftDeletes;
 
     protected $casts = [
         'status' => ContentStatus::class,

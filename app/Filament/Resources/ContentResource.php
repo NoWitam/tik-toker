@@ -25,6 +25,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Carbon;
 class ContentResource extends Resource
 {
@@ -81,6 +82,7 @@ class ContentResource extends Resource
                 Tables\Columns\TextColumn::make('publication_time')->label('Czas publikacji'),
             ])
             ->filters([
+                Tables\Filters\TrashedFilter::make(),
                 SelectFilter::make('status')
                     ->multiple()
                     ->options([
@@ -145,7 +147,8 @@ class ContentResource extends Resource
             ])
             ->actions([
                 Tables\Actions\Action::make('manage')->label('Zarządzaj')->url(fn ($record) => self::getUrl('edit', ['record' => $record]))
-                                ->color('gray')->icon('heroicon-o-command-line')
+                                ->color('gray')->icon('heroicon-o-command-line'),
+                Tables\Actions\RestoreAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -193,6 +196,14 @@ class ContentResource extends Resource
             ActionsRelationManager::class,
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+{
+    return parent::getEloquentQuery()
+        ->withoutGlobalScopes([
+            SoftDeletingScope::class,
+        ]);
+}
 
     public static function getPages(): array
     {

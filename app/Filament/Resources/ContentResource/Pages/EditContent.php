@@ -10,6 +10,7 @@ use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use App\Models\Enums\ContentStatus;
 use App\Services\ContentService;
+use Filament\Actions\RestoreAction;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Fieldset;
@@ -148,7 +149,9 @@ class EditContent extends EditRecord implements HasInfolists
 
     protected function getHeaderActions(): array
     {
-        return [];
+        return [
+            RestoreAction::make(),
+        ];
     }
 
     private function createScenesSchema()
