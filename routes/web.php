@@ -1,26 +1,10 @@
 <?php
 
-use App\Jobs\ContactVideos;
-use App\Jobs\CreateDiarization;
-use App\Jobs\CreateHistoricalTikTok;
-use App\Jobs\CreateScript;
-use App\Jobs\CreateVideo;
 use App\Models\Action;
-use App\Models\Content;
-use App\Models\Enums\ActionStatus;
-use App\Models\Enums\ContentStatus;
-use App\Models\Knowledge;
-use App\Models\Series;
-use App\Models\Tag;
-use App\Services\ActionService;
-use App\Services\ContentService;
-use App\Services\SeriesService;
-use Facebook\WebDriver\Interactions\Internal\WebDriverContextClickAction;
-use Illuminate\Support\Facades\File;
+use Illuminate\Contracts\Queue\Queue;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use BorodinVasiliy\Stories;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -34,7 +18,11 @@ use Illuminate\Support\Facades\Storage;
 */
 
 Route::get('/test', function () {
-    //ContentService::createContentForNextWeek();
+
+    $action = Action::find(937);
+    $uuid = $action->job_uuid;
+
+
 });
 
 Route::get('/chromium', function() {

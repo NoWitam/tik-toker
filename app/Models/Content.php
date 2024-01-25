@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Jobs\CreateScript;
+use App\Jobs\UploadVideo;
 use App\Models\Enums\ContentStatus;
 use App\Models\Interfaces\Actionable;
 use App\Models\Interfaces\Statusable;
@@ -60,6 +61,7 @@ class Content extends Model implements Actionable, Statusable
     {
         static::created(function (Content $content) {
             CreateScript::dispatch($content)->onQueue(auth()->check() ? 'user' : 'content_create');
+            UploadVideo::dispatch($content)->onQueue('content_upload')->delay($content->publication_time);
         });
     }
 }
