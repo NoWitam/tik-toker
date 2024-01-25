@@ -11,11 +11,4 @@ trait HasActions
     {
         return $this->morphMany(Action::class, 'actionable');
     }
-
-    protected static function bootHasActions()
-    {
-        static::deleting(function ($model) {
-            $model->actions()->delete();
-        });
-    }
 }
