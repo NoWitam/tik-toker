@@ -9,7 +9,10 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Wiebenieuwenhuis\FilamentCodeEditor\Components\CodeEditor;
 
@@ -51,12 +54,25 @@ class SourceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label('Nazwa'),
+                Tables\Columns\TextColumn::make('name')->label('Nazwa')->searchable(),
                 Tables\Columns\TagsColumn::make('tags.name')->label('Tagi'),
                 Tables\Columns\ToggleColumn::make('isActive')->label('Aktywność'),
             ])
             ->filters([
-                //
+                SelectFilter::make('tags')->label('Tagi')
+                    ->multiple()
+                    ->relationship('tags', 'name')
+                    ->searchable()
+                    ->preload(),
+                TernaryFilter::make('isActive')->label('Aktywność')->nullable()
+                    ->queries(
+                        true: fn (Builder $query) => $query->where('isActive', true),
+                        false: fn (Builder $query) => $query->where('isActive', false),
+                        blank: fn (Builder $query) => $query
+                    )
+                    ->placeholder('Wszystkie')
+                    ->trueLabel('Aktywne')
+                    ->falseLabel('Nie aktywne')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

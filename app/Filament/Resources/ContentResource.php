@@ -5,8 +5,10 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ContentResource\Pages;
 use App\Filament\Resources\ContentResource\RelationManagers\ActionsRelationManager;
 use App\Infolists\Components\JsonList;
+use App\Infolists\Components\VideoEntry;
 use App\Models\Account;
 use App\Models\Content;
+use App\Models\Enums\ContentStatus;
 use App\Models\Series;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -19,7 +21,11 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
-
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Forms\Components\Select;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 class ContentResource extends Resource
 {
     protected static ?string $model = Content::class;
@@ -66,16 +72,76 @@ class ContentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label('Nazwa')->wrap(),
+                Tables\Columns\TextColumn::make('name')->label('Nazwa')->wrap()->searchable('contents.name'),
                 Tables\Columns\IconColumn::make('status')->icon(fn ($state): string => $state->getIcon())->color(fn ($state): string => $state->getColor()),
                 Tables\Columns\TextColumn::make('series.account.name')->label('Konto'),
                 Tables\Columns\TextColumn::make('series.name')->label('Seria'),
-                Tables\Columns\TextColumn::make('knowledge.name')->label('Na podstawie')->wrap(),
+                Tables\Columns\TextColumn::make('knowledge.name')->label('Na podstawie')->wrap()->searchable('knowledge.name'),
                 Tables\Columns\TextColumn::make('actions_sum_cost')->label('Koszt')->sum('actions', 'cost')->suffix('$')->default(0),
                 Tables\Columns\TextColumn::make('publication_time')->label('Czas publikacji'),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->multiple()
+                    ->options([
+                        ContentStatus::IN_PROCESS->value => 'W trakcie tworzenia',
+                        ContentStatus::WAITING->value => 'Czeka na interakcje',
+                        ContentStatus::CREATED->value => 'Utworzony',
+                        ContentStatus::PUBLISHED->value => 'Opublikowany',
+                        ContentStatus::ERROR->value => "Błąd"
+                    ])->label('Status'),
+                Filter::make('publication_time')
+                        ->form([
+                            Select::make('publication_time')
+                                ->options([
+                                    'today' => 'Dzisiaj',
+                                    'tomorrow' => 'Jutro',
+                                    'this-week' => 'Ten tydzień',
+                                    'last-week' => 'Ostatni tydzień'
+                                ])->label('Utworzono')
+                        ])->query(function (Builder $query, array $data): Builder {
+
+                            if($data['publication_time'] == 'today') {
+                                return $query->where('publication_time', '>=', Carbon::now()->startOfDay())
+                                            ->where('publication_time', '<=', Carbon::now()->endOfDay());
+                            }
+
+                            if($data['publication_time'] == 'tomorrow') {
+                                return $query->where('publication_time', '>=', Carbon::now()->startOfDay()->addDays(1))
+                                            ->where('publication_time', '<=', Carbon::now()->endOfDay()->addDays(1));
+                            }
+
+                            if($data['publication_time'] == 'this-week') {
+                                return $query->where('publication_time', '>=', Carbon::now()->startOfWeek())
+                                            ->where('publication_time', '<=', Carbon::now()->endOfWeek());
+                            }
+
+                            if($data['publication_time'] == 'last-week') {
+                                return $query->where('publication_time', '>=', Carbon::now()->startOfWeek()->subDays(7))
+                                            ->where('publication_time', '<=', Carbon::now()->endOfWeek()->subDays(7));
+                            }
+
+                            return $query;
+                        })->indicateUsing(function (array $data): ?string {
+
+                            if($data['publication_time'] == 'today') {
+                                return "Publikacja dzisiaj";
+                            }
+
+                            if($data['publication_time'] == 'tomorrow') {
+                                return "Publikacja jutro";
+                            }
+
+                            if($data['publication_time'] == 'this-week') {
+                                return "Publikacja w tym tygodniu";
+                            }
+
+                            if($data['publication_time'] == 'last-week') {
+                                return "Publikacja w ostatnim tygodniu";
+                            }
+
+                            return null;
+                        })
             ])
             ->actions([
                 Tables\Actions\Action::make('manage')->label('Zarządzaj')->url(fn ($record) => self::getUrl('edit', ['record' => $record]))
@@ -108,6 +174,14 @@ class ContentResource extends Resource
                         JsonList::make('archivalScript')->label("Skrypt")        
                     ])->columns(1)->hidden(function ($record) {
                         return $record->archivalScript == null;
+                    }),
+                    Tab::make('Wideo')->schema([
+                        VideoEntry::make('video')
+                    ])->visible(function ($record) {
+                        return in_array($record->status, [
+                            ContentStatus::CREATED,
+                            ContentStatus::PUBLISHED
+                        ]);
                     })
                 ])
             ])->columns(1);

@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AccountResource\Pages;
 use App\Filament\Resources\AccountResource\RelationManagers;
+use App\Filament\Resources\AccountResource\RelationManagers\ContentsRelationManager;
 use App\Filament\Resources\AccountResource\RelationManagers\SeriesRelationManager;
 use App\Models\Account;
 use Filament\Forms;
@@ -35,7 +36,7 @@ class AccountResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label('Nazwa'),
+                Tables\Columns\TextColumn::make('name')->label('Nazwa')->searchable(),
                 Tables\Columns\TextColumn::make('publications_count')->label('Filmy per tydzień')->counts('publications'),
                 Tables\Columns\TextColumn::make('contents_count')->label('Filmy')->counts('contents'),
             ])
@@ -57,6 +58,7 @@ class AccountResource extends Resource
     {
         return [
             SeriesRelationManager::class,
+            ContentsRelationManager::class
         ];
     }
 

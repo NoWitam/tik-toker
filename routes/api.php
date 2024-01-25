@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\Content;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/content/{content}', function (Content $content) {
+    $className = explode("\\", Content::class);
+    $className = array_pop($className);
+    $src = Storage::path("Models/{$className}/{$content->id}/video.mp4");
+    return response()->download($src);
+})->name('content');

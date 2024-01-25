@@ -5,6 +5,7 @@ namespace App\Filament\Resources\KnowledgeResource\Pages;
 use App\Filament\Resources\KnowledgeResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class ListKnowledge extends ListRecords
 {
