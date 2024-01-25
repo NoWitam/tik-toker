@@ -10,6 +10,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class KnowledgeResource extends Resource
@@ -41,11 +42,16 @@ class KnowledgeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label('Nazwa'),
+                Tables\Columns\TextColumn::make('name')->label('Nazwa')->searchable(),
                 Tables\Columns\TagsColumn::make('tags.name')->label('Tagi')
             ])
             ->filters([
-                //
+                SelectFilter::make('tags')->label('Tagi')
+                    ->multiple()
+                    ->relationship('tags', 'name')
+                    ->searchable()
+                    ->preload()
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

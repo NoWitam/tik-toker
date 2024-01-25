@@ -35,7 +35,7 @@ class TagResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label('Nazwa'),
+                Tables\Columns\TextColumn::make('name')->label('Nazwa')->searchable(),
             ])
             ->filters([
                 //

@@ -5,15 +5,17 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ActionResource\Pages;
 use App\Models\Action;
 use App\Models\Enums\ActionStatus;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Stringable;
 use App\Services\ActionService;
-use Filament\Infolists;
-use App\Infolists\Components\JsonList;
-use Filament\Infolists\Infolist;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class ActionResource extends Resource
 {
@@ -49,13 +51,56 @@ class ActionResource extends Resource
             ])
             ->defaultSort('updated_at', 'desc')
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->multiple()
+                    ->options([
+                        ActionStatus::WAITING->value => 'W kolejce',
+                        ActionStatus::PROCESSING->value => 'Procedowane',
+                        ActionStatus::FAILED->value => 'Nie udane',
+                        ActionStatus::SUCCESS->value => 'Udane'
+                    ])->label('Status'),
+                Filter::make('created_at')
+                        ->form([
+                            Select::make('created_at')
+                                ->options([
+                                    'today' => 'Dzisiaj',
+                                    'this-week' => 'Ten tydzień',
+                                    'last-week' => 'Ostatni tydzień'
+                                ])->label('Utworzono')
+                        ])->query(function (Builder $query, array $data): Builder {
+
+                            if($data['created_at'] == 'today') {
+                                return $query->where('created_at', '>=', Carbon::now()->startOfDay());
+                            }
+
+                            if($data['created_at'] == 'this-week') {
+                                return $query->where('created_at', '>=', Carbon::now()->startOfWeek());
+                            }
+
+                            if($data['created_at'] == 'last-week') {
+                                return $query->where('created_at', '>=', Carbon::now()->startOfWeek()->subDays(7))
+                                            ->where('created_at', '<=', Carbon::now()->endOfWeek()->subDays(7));
+                            }
+
+                            return $query;
+                        })->indicateUsing(function (array $data): ?string {
+
+                            if($data['created_at'] == 'today') {
+                                return "Utworzone dzisiaj";
+                            }
+
+                            if($data['created_at'] == 'this-week') {
+                                return "Utworzone w tym tygodniu";
+                            }
+
+                            if($data['created_at'] == 'last-week') {
+                                return "Utworzone w ostatnim tygodniu";
+                            }
+
+                            return null;
+                        })
             ])
             ->actions([
-                Tables\Actions\DeleteAction::make()
-                    ->hidden(function ($record) {
-                        return $record->status != ActionStatus::WAITING;
-                    }),
                 Tables\Actions\Action::make('retry')
                     ->label('Ponów')
                     ->icon('heroicon-o-arrow-path')
