@@ -21,7 +21,7 @@ Route::get('/test', function () {
 
     $action = Action::find(937);
     $uuid = $action->job_uuid;
-    $job = DB::table('jobs')->where('payload', 'like', '%"uuid":"' . $uuid . '"%')->delete();
+
 
 });
 
