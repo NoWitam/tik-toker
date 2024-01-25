@@ -2,20 +2,15 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Interfaces\Statusable;
 use App\Models\Content;
+use App\Models\Enums\ContentStatus;
 use App\Models\Interfaces\Actionable;
 use App\Services\ContentService;
 use App\Services\Stories;
-use Illuminate\Bus\Batchable;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
-class CreateVideo extends ActionableJob
+class CreateVideo extends ActionableJob implements Statusable
 {
 
     public $timeout = 300;
@@ -112,6 +107,13 @@ class CreateVideo extends ActionableJob
                 "numer" => $this->scene,
                 "długość" => $this->getAudioTime($path . "/scene{$this->scene}.wav")
             ]
+        ];
+    }
+
+    public function getChangesOnError() : array
+    {
+        return [
+            'status' => ContentStatus::ERROR
         ];
     }
 

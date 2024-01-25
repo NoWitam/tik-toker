@@ -2,13 +2,14 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Interfaces\Statusable;
 use App\Models\Content;
 use App\Models\Enums\ContentStatus;
 use App\Models\Interfaces\Actionable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
-class ContactVideos extends ActionableJob
+class ContactVideos extends ActionableJob implements Statusable
 {
     public $timeout = 300;
 
@@ -57,6 +58,13 @@ class ContactVideos extends ActionableJob
 
         return [
             "info" => "Sceny scalone pomyślnie",
+        ];
+    }
+
+    public function getChangesOnError() : array
+    {
+        return [
+            'status' => ContentStatus::ERROR
         ];
     }
 

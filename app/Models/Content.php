@@ -6,14 +6,13 @@ use App\Jobs\CreateScript;
 use App\Jobs\UploadVideo;
 use App\Models\Enums\ContentStatus;
 use App\Models\Interfaces\Actionable;
-use App\Models\Interfaces\Statusable;
 use App\Models\Traits\HasActions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
-class Content extends Model implements Actionable, Statusable
+class Content extends Model implements Actionable
 {
     use HasFactory, HasActions, SoftDeletes;
 
@@ -23,13 +22,6 @@ class Content extends Model implements Actionable, Statusable
         'publication_time' => 'datetime',
         'publicated_at' => 'datetime'
     ];
-
-    public function getChangesOnError() : array
-    {
-        return [
-            'status' => ContentStatus::ERROR
-        ];
-    }
 
     public function getArchivalScriptAttribute()
     {

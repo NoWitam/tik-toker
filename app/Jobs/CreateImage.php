@@ -3,12 +3,14 @@
 namespace App\Jobs;
 
 use App\Exceptions\ExceptionWithData;
+use App\Jobs\Interfaces\Statusable;
 use App\Models\Content;
+use App\Models\Enums\ContentStatus;
 use App\Models\Interfaces\Actionable;
 use App\Services\ContentService;
 use Illuminate\Support\Facades\Storage;
 
-class CreateImage extends ActionableJob
+class CreateImage extends ActionableJob implements Statusable
 {
     public $timeout = 300;
     public string $image;
@@ -66,6 +68,13 @@ class CreateImage extends ActionableJob
                 "numer" => $this->scene,
                 "opis obrazka" => $this->image
             ]
+        ];
+    }
+
+    public function getChangesOnError() : array
+    {
+        return [
+            'status' => ContentStatus::ERROR
         ];
     }
 

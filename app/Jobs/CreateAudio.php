@@ -3,12 +3,14 @@
 namespace App\Jobs;
 
 use App\Exceptions\ExceptionWithData;
+use App\Jobs\Interfaces\Statusable;
 use App\Models\Content;
+use App\Models\Enums\ContentStatus;
 use App\Models\Interfaces\Actionable;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
-class CreateAudio extends ActionableJob
+class CreateAudio extends ActionableJob implements Statusable
 {
     public $timeout = 300;
     public string $text;
@@ -70,8 +72,13 @@ class CreateAudio extends ActionableJob
         } else {
             throw new ExceptionWithData("Status: {$response->status}", $response);
         }
+    }
 
-
+    public function getChangesOnError() : array
+    {
+        return [
+            'status' => ContentStatus::ERROR
+        ];
     }
 
     private function getAudio()

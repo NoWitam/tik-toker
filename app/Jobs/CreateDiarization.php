@@ -5,10 +5,10 @@ namespace App\Jobs;
 use App\Models\Content;
 use App\Models\Enums\ContentStatus;
 use App\Models\Interfaces\Actionable;
-use App\Models\Interfaces\Statusable;
+use App\Jobs\Interfaces\Statusable;
 use Illuminate\Support\Facades\Storage;
 
-class CreateDiarization extends ActionableJob
+class CreateDiarization extends ActionableJob implements Statusable
 {
     public $timeout = 300;
     public $api = "edenai";
@@ -43,6 +43,14 @@ class CreateDiarization extends ActionableJob
             ]
         ];
     }
+
+    public function getChangesOnError() : array
+    {
+        return [
+            'status' => ContentStatus::ERROR
+        ];
+    }
+
     private function loadDiarization()
     {
         $className = explode("\\", Content::class);

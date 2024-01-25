@@ -9,9 +9,11 @@ use App\Models\Interfaces\Actionable;
 use HeadlessChromium\BrowserFactory;
 use HeadlessChromium\Communication\Message;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class UploadVideo extends ActionableJob
 {
+    public $timeout = 300;
     /**
      * Create a new job instance.
      */
@@ -40,7 +42,7 @@ class UploadVideo extends ActionableJob
         $browserFactory = new BrowserFactory(config('app.chromium'));
         $browser = $browserFactory->createBrowser([
           'headless' => true, // disable headless mode
-          'sendSyncDefaultTimeout' => 20000,
+          'sendSyncDefaultTimeout' => 30000,
           'connectionDelay' => 500
         ]);
 
@@ -53,9 +55,9 @@ class UploadVideo extends ActionableJob
 
             $page->waitUntilContainsElement('input');
             $input = $page->dom()->querySelector('input');
-            $input->sendFile($this->getFolderName() . "/video.mp4");
+            $input->sendFile(Storage::path($this->getFolderName() . "/video.mp4"));
 
-            sleep(10);
+            $page->waitUntilContainsElement('.DraftEditor-root');
 
             $x = $page->callFunction("
                     function() {\n return document.querySelector('.DraftEditor-root').getBoundingClientRect().x;\n}"
@@ -93,7 +95,8 @@ class UploadVideo extends ActionableJob
             $page->evaluate('document.querySelector(\'.btn-post button\').click()');
 
             $this->content->update([
-                'publicated_at' => Carbon::now()
+                'publicated_at' => Carbon::now(),
+                'status' => ContentStatus::PUBLISHED
             ]);
 
         } finally {

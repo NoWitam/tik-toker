@@ -2,12 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Interfaces\Statusable;
 use App\Models\Content;
 use App\Models\Enums\ContentStatus;
 use App\Models\Interfaces\Actionable;
 use Illuminate\Support\Facades\Cache;
 
-class CreateScript extends ActionableJob
+class CreateScript extends ActionableJob implements Statusable
 {
 
     public $timeout = 300;
@@ -54,6 +55,13 @@ class CreateScript extends ActionableJob
 
         return [
           'info' => 'Zakończono pomyślnie',
+        ];
+    }
+
+    public function getChangesOnError() : array
+    {
+        return [
+            'status' => ContentStatus::ERROR
         ];
     }
 

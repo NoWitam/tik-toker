@@ -6,7 +6,7 @@ use App\Exceptions\ReleaseActionableJobException;
 use App\Models\Action;
 use App\Models\Enums\ActionStatus;
 use App\Models\Interfaces\Actionable;
-use App\Models\Interfaces\Statusable;
+use App\Jobs\Interfaces\Statusable;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -43,7 +43,6 @@ abstract class ActionableJob implements ShouldQueue
         try{
             if(property_exists($this, 'api')) {
                 if ($timestamp = Cache::get("limit-{$this->api}")) {
-                    dump("Not calling api {$timestamp->format('H:i:s')}");
                     throw new ReleaseActionableJobException(Cache::get("limit-{$this->api}"));
                 }
             }
@@ -83,9 +82,9 @@ abstract class ActionableJob implements ShouldQueue
 
             $this->delete();
         } catch(Throwable $e) {
-            if($this->getActionable() instanceof Statusable) {
+            if($this instanceof Statusable) {
                 $this->getActionable()->update(
-                    $this->getActionable()->getChangesOnError()
+                    $this->getChangesOnError()
                 );
             }
 

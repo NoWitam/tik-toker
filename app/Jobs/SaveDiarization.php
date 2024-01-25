@@ -3,20 +3,15 @@
 namespace App\Jobs;
 
 use App\Exceptions\ExceptionWithData;
+use App\Jobs\Interfaces\Statusable;
 use App\Models\Content;
 use App\Models\Interfaces\Actionable;
-use ErrorException;
-use Illuminate\Bus\Batchable;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use App\Exceptions\ReleaseActionableJobException;
+use App\Models\Enums\ContentStatus;
 use App\Services\ContentService;
 use Illuminate\Support\Facades\Storage;
 
-class SaveDiarization extends ActionableJob
+class SaveDiarization extends ActionableJob implements Statusable
 {
     public $timeout = 300;
     public $api = "edenai";
@@ -90,6 +85,13 @@ class SaveDiarization extends ActionableJob
                 "tekst" => $this->content->script['details'][$this->scene]['content'],
                 "napisy" => $parts
             ]
+        ];
+    }
+
+    public function getChangesOnError() : array
+    {
+        return [
+            'status' => ContentStatus::ERROR
         ];
     }
 

@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Action;
+use App\Models\Content;
+use App\Models\Enums\ContentStatus;
 use Illuminate\Contracts\Queue\Queue;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -19,8 +21,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
 
-    $action = Action::find(937);
-    $uuid = $action->job_uuid;
+Content::find(40)->update([
+    'status' => ContentStatus::CREATED
+]);
 
 
 });
