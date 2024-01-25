@@ -19,7 +19,9 @@ class Content extends Model implements Actionable, Statusable
 
     protected $casts = [
         'status' => ContentStatus::class,
-        'script' => 'array'
+        'script' => 'array',
+        'publication_time' => 'datetime',
+        'publicated_at' => 'datetime'
     ];
 
     public function getChangesOnError() : array
