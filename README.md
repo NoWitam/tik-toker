@@ -1,66 +1,97 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## O projekcie
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Jest innowacyjne narzędzie wykorzystujące sztuczną inteligencję (generowanie tekstó, obrazów, mowy, diaryzacja) do generowania filmów rozrywkowych na
+podstawie opisów zdarzeń przetrzymywanych w bazie danych. Filmy te są w formacie "tik tokowym" gdyż narzędzie to jest dedykowane do publikowania treści na tej platformie.
+Cele projektu to:
 
-## About Laravel
+- Automatyczne tworzenie atrakcyjnych filmów rozrywkowych na podstawieopisów zdarzeń.
+- Pomyślna implementacja sztucznej inteligencji w celu generowania filmów.
+- Skuteczne publikowanie stworzonych filmów na platformie TikTok.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Przykład
+https://www.tiktok.com/@panhuberr/video/7328125011233967392
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+https://github.com/NoWitam/tik-toker/assets/87388700/17f6b30a-7677-4864-8130-16f4ee97e444
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Film ten został wygenerowany na podstawie tekstu z tego [artykułu](https://ciekawostkihistoryczne.pl/2014/01/07/erotyczne-klatwy-w-starozytnosci/)
 
-## Learning Laravel
+## Prompt użyty do wygenerowanie tego filmu
+Prowadzę kanał na tik toku a ty jesteś moim asystentem. Twoim zadaniem jest pisanie scenariuszy do filmów w formacie tik tokowym na podstawie suchych danych historycznych które ci podam.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1.Grupa docelowa: szersza publika która szuka rozrywki edukacyjnej.
+2.Styl filmów:  lekkie i humorystyczne.
+3.Forma filmów:  krótkie materiały w formie zabawnych i szokujących anegdot.
+4.Styl wizualny: Nie chce występować w filmach. Będe jedynie opowiadał a w tle będą pasujące obrazki.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Porady dotyczące tworzenia scenariuszy do tik toków:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Skup się na anegdotach**: Przeszukaj historię w poszukiwaniu najbardziej zaskakujących i niezwykłych opowieści. Przykłady to dziwne zwyczaje, nietypowe prawo, zaskakujące fakty dotyczące codziennego życia lub skandale z życia cesarzy.
 
-## Laravel Sponsors
+2. **Stwórz serię**: Rozważ stworzenie serii filmików, z których każdy skupia się na innym aspekcie historii - np. moda, jedzenie, zabawy, gladiatorzy, polityka itp.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. **Użyj humoru**: Postaraj się przekazać treści w lekki, humorystyczny sposób. W zależności od Twojego talentu komediowego, możesz nawet parodiować postacie historyczne czy sytuacje.
 
-### Premium Partners
+5. **Wizualna atrakcyjność**: Doświadczające z rekwizytami czy tłem, które nawiązują do okresu historycznego o którym opowiadasz. Na przykładzie starożytnego Rzymu może to być toga, model rzymskiego miecza lub tarczy – cokolwiek, co wizualnie wciągnie widzów w klimat epoki.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+6. **Twórz interaktywne quizy**: TikTok umożliwia tworzenie interaktywnych opcji takich jak ankiety czy quizy, gdzie możesz sprawdzić wiedzę swoich widzów na temat starożytnego Rzymu w zabawny sposób.
 
-## Contributing
+7. **Wykorzystuj popularne formaty**: Przystosuj popularne trendy TikTokowe do swojej tematyki – np. reagowanie na popularne brzmienia lub wyzwania, ale z historycznym twistem.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+8. **Edukacyjne ale krótkie**: Upewnij się, że treści są edukacyjne, ale wyjaśnione w prosty i szybki sposób, taki, który łatwo się zapamiętuje i chętnie się ogląda.
 
-## Code of Conduct
+9. **Hashtagi**: Używaj odpowiednich hashtagów, aby osoby zainteresowane historią mogły łatwo znaleźć Twoje filmy, np. #StarożytnyRzym #Rzym #Historia #CiekawostkiHistoryczne.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Wynik zwróć w postaci json o następującym formacie:
+1. "title" - tytuł
+2. "details" - kolejne sceny tik toka
+2.1 "image" - opis który posłuży jako prompt do wygenerowania przez AI obrazka będącego w tle tej sceny przez DallE3. Pamiętaj aby opis był zgodny z system bezpieczeństwa DallE3.
+2.2 "content" - tekst który mówi narrator w konkretnej scenie. Nie używaj skrótów tylko zamiast tego pełnych sformułowań. Nie używaj cyfr tylko ich słownych odpowiedników
+3. "hashtags" - hashtagi 
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Przykład scenariusza filmu pod tytułem "Bitwa pod Kannami 216 r. p.n.e. Największa rzeź starożytnego świata":
+```json
+{
+  "title": "Bitwa pod Kannami: Rzymski thriller z twistem",
+  "details": [
+    {
+      "image": "Starożytni Rzymianie, Hannibal, mapa Rzymu, słonie bojowe",
+      "content": "Czy słyszeliście o tzw. 'rzymianej grze w telefony' z dwieście szesnastym roku przed naszą erą? No to zapnijcie pasy, bo lecimy do starożytnego Rzymu, gdzie gada nie ma, ale za to są słonie… i sporo więcej zabawy!"
+    },
+    {
+      "image": "Obrazek Hannibala jako dziecko składającego przysięgę w Kartaginie",
+      "content": "Tak, słonie w Alpach! Bo dlaczego by nie? Hannibal, który obiecał jako dziecko ciągłe wrogo nastawienie do Rzymu, wziął te słowa NAJWYRAŹNIEJ dosłownie."
+    },
+    {
+      "image": "Karykatura rzymskiego senatora z wyraźną miną zaskoczenia",
+      "content": "Więc, jak byście się czuli, gdyby wasz wróg postanowił na wakacje przejść przez Alpy? Pewnie jak rzymianie – totalnie zaskoczeni... No i wściekli!"
+    },
+    {
+      "image": "Impreza w starożytnym Rzymie",
+      "content": "Odważny Hannibal wprowadza 37 słonich łamaczy lodów i około pięćdziesiąt tysięcy turystów jako niespodziewanych gości na apenińskie party. Rzymianie za to witali ponad osiemdziesiąt sześć tysięcy własnych ludzi w barwach 'O, mój Rzym' na wielką bitkę pod Kannami."
+    },
+    {
+      "image": "Obrazek obu konsulów Rzymu, każdy pociągający toga za różne kierunki",
+      "content": "A konsulowie? Co tu dużo mówić, dwie głowy to jednak nie zawsze jeden Rzym. Jeden chciał walki, drugi nie. Klasyczna rzymska indecyzja."
+    },
+    {
+      "image": "Rzymska jazda w starciu z kartagińską jazdą",
+      "content": "A party zaczyna się od gier – takich jak 'kto szybciej straci swoją jazdę'. Hint: Nie było to Kartagina."
+    },
+    {
+      "image": "Obrazek rzymskich legionistów rzucanych na 'pizzę' Hannibala, która ma zęby i szczypce",
+      "content": "Hannibal serwuje taktyczny półksiężyc. A rzymianie? Myślą, że to nowa odmiana pizzy, rzucili się na nią z apetytem. Tylko że ta pizza miała zęby i szczypce na obrzeżach!"
+    },
+    {
+      "image": "Grafika Hannibala z namiotem i flagą 'Kartagina' tuż przed murami Rzymu",
+      "content": "'Hannibal ante portas!' – było słychać na ulicach Rzymu, co można przetłumaczyć jako 'Chłopaki, Hannibal rozstawił swój kemping pod naszymi bramami i nie wygląda na to, żeby szybko stąd wyjechał!'"
+    }
+  ],
+  "hashtags": [
+    "#Historia",
+    "#StarożytnyRzym",
+    "#BitwaPodKannami",
+    "#Hannibal",
+    "#RzymvsKartagina",
+    "#EdukacjaZHumorem"
+  ]
+}
